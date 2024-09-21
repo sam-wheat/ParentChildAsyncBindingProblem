@@ -1,0 +1,50 @@
+﻿<div class="card bg-light mt-3" style="width:18rem ">
+    <div class="card-body">
+        <h3 class="card-title">ChildBind Component</h3>
+        <p class="card-text">
+            Child <code>Year</code>: @Year
+        </p>
+       
+        <select>
+            @if (Years is not null)
+            {
+                foreach (string year in Years)
+                {
+                    <option>@year</option>
+                }
+
+            }
+        </select>
+    </div>
+</div>
+
+@code {
+    private int _Year;
+    [Parameter]
+    public int Year 
+    {
+        get => _Year;
+        set
+        {
+            _Year = value;
+            LoadDataAsync(); // need to call LoadDataAsync when Year changes
+        }
+    }
+
+    [Parameter]
+    public EventCallback<int> YearChanged { get; set; }
+
+    private List<string> Years;
+
+    
+
+    private async Task LoadDataAsync()
+    {
+        await Task.Delay(100); // Need to call async service here
+        Years = new List<string>();
+        for (int i = 0; i < 5; i++)
+            Years.Add((Year + i).ToString());
+
+    }
+
+}
